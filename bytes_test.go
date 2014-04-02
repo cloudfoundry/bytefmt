@@ -1,9 +1,9 @@
 package bytefmt_test
 
 import (
-	. "github.com/cloudfoundry/bytefmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+	. "github.com/pivotal-golang/bytefmt"
 )
 
 var _ = Describe("bytefmt", func() {
