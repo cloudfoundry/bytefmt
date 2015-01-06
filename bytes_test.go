@@ -10,8 +10,23 @@ var _ = Describe("bytefmt", func() {
 
 	Context("ByteSize", func() {
 		It("Prints in the largest possible unit", func() {
+			Expect(ByteSize(10 * TERABYTE)).To(Equal("10T"))
+			Expect(ByteSize(uint64(10.5 * TERABYTE))).To(Equal("10.5T"))
+
+			Expect(ByteSize(10 * GIGABYTE)).To(Equal("10G"))
+			Expect(ByteSize(uint64(10.5 * GIGABYTE))).To(Equal("10.5G"))
+
 			Expect(ByteSize(100 * MEGABYTE)).To(Equal("100M"))
 			Expect(ByteSize(uint64(100.5 * MEGABYTE))).To(Equal("100.5M"))
+
+			Expect(ByteSize(100 * KILOBYTE)).To(Equal("100K"))
+			Expect(ByteSize(uint64(100.5 * KILOBYTE))).To(Equal("100.5K"))
+
+			Expect(ByteSize(1)).To(Equal("1B"))
+		})
+
+		It("prints '0' for zero bytes", func() {
+			Expect(ByteSize(0)).To(Equal("0"))
 		})
 	})
 
@@ -21,6 +36,14 @@ var _ = Describe("bytefmt", func() {
 				megabytes uint64
 				err       error
 			)
+
+			megabytes, err = ToMegabytes("5B")
+			Expect(megabytes).To(Equal(uint64(0)))
+			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("5K")
+			Expect(megabytes).To(Equal(uint64(0)))
+			Expect(err).NotTo(HaveOccurred())
 
 			megabytes, err = ToMegabytes("5M")
 			Expect(megabytes).To(Equal(uint64(5)))
@@ -72,6 +95,9 @@ var _ = Describe("bytefmt", func() {
 			_, err := ToMegabytes("5MBB")
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
+
+			_, err = ToMegabytes("5BB")
+			Expect(err).To(HaveOccurred())
 		})
 
 		It("allows whitespace before and after the value", func() {
