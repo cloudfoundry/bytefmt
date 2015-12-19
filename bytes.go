@@ -88,3 +88,33 @@ func ToMegabytes(s string) (uint64, error) {
 
 	return bytes / MEGABYTE, nil
 }
+
+// ToByte parses a string formatted by ByteSize as bytes
+func ToBytes(s string) (uint64, error) {
+	parts := bytesPattern.FindStringSubmatch(strings.TrimSpace(s))
+	if len(parts) < 3 {
+		return 0, invalidByteQuantityError
+	}
+
+	value, err := strconv.ParseUint(parts[1], 10, 0)
+	if err != nil || value < 1 {
+		return 0, invalidByteQuantityError
+	}
+
+	var bytes uint64
+	unit := strings.ToUpper(parts[2])
+	switch unit[:1] {
+	case "T":
+		bytes = value * TERABYTE
+	case "G":
+		bytes = value * GIGABYTE
+	case "M":
+		bytes = value * MEGABYTE
+	case "K":
+		bytes = value * KILOBYTE
+	case "B":
+		bytes = value * BYTE
+	}
+
+	return bytes, nil
+}
