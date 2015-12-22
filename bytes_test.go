@@ -118,4 +118,93 @@ var _ = Describe("bytefmt", func() {
 			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
 		})
 	})
+
+	Context("ToBytes", func() {
+		It("parses byte amounts with short units (e.g. M, G)", func() {
+			var (
+				bytes uint64
+				err   error
+			)
+
+			bytes, err = ToBytes("5B")
+			Expect(bytes).To(Equal(uint64(5)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("5K")
+			Expect(bytes).To(Equal(uint64(5 * KILOBYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("5M")
+			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("5m")
+			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("2G")
+			Expect(bytes).To(Equal(uint64(2 * GIGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("3T")
+			Expect(bytes).To(Equal(uint64(3 * TERABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("parses byte amounts with long units (e.g MB, GB)", func() {
+			var (
+				bytes uint64
+				err   error
+			)
+
+			bytes, err = ToBytes("5MB")
+			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("5mb")
+			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("2GB")
+			Expect(bytes).To(Equal(uint64(2 * GIGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("3TB")
+			Expect(bytes).To(Equal(uint64(3 * TERABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("returns an error when the unit is missing", func() {
+			_, err := ToBytes("5")
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
+		})
+
+		It("returns an error when the unit is unrecognized", func() {
+			_, err := ToBytes("5MBB")
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
+
+			_, err = ToBytes("5BB")
+			Expect(err).To(HaveOccurred())
+		})
+
+		It("allows whitespace before and after the value", func() {
+			bytes, err := ToBytes("\t\n\r 5MB ")
+			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("returns an error for negative values", func() {
+			_, err := ToBytes("-5MB")
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
+		})
+
+		It("returns an error for zero values", func() {
+			_, err := ToBytes("0TB")
+			Expect(err).To(HaveOccurred())
+			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
+		})
+	})
 })

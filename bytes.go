@@ -61,6 +61,16 @@ func ByteSize(bytes uint64) string {
 
 // ToMegabyte parses a string formatted by ByteSize as megabytes
 func ToMegabytes(s string) (uint64, error) {
+	bytes, err := ToBytes(s)
+	if err != nil {
+		return 0, err
+	}
+
+	return bytes / MEGABYTE, nil
+}
+
+// ToByte parses a string formatted by ByteSize as bytes
+func ToBytes(s string) (uint64, error) {
 	parts := bytesPattern.FindStringSubmatch(strings.TrimSpace(s))
 	if len(parts) < 3 {
 		return 0, invalidByteQuantityError
@@ -86,5 +96,5 @@ func ToMegabytes(s string) (uint64, error) {
 		bytes = value * BYTE
 	}
 
-	return bytes / MEGABYTE, nil
+	return bytes, nil
 }
