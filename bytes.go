@@ -70,7 +70,7 @@ func ToMegabytes(s string) (uint64, error) {
 	return bytes / MEGABYTE, nil
 }
 
-// ToByte parses a string formatted by ByteSize as bytes.
+// ToBytes parses a string formatted by ByteSize as bytes.
 func ToBytes(s string) (uint64, error) {
 	parts := bytesPattern.FindStringSubmatch(strings.TrimSpace(s))
 	if len(parts) < 3 {
