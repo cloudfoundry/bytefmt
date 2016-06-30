@@ -1,6 +1,6 @@
-// Package bytefmt contains helper methods and constants for converting to and from a human-readable byte format.
+// bytefmt contains helper methods and constants for converting to and from a human readable byte format.
 //
-//	bytefmt.ByteSize(100.5*bytefmt.MEGABYTE) // "100.5M"
+//	bytefmt.ByteSize(100.5*bytefmt.MEGABYE) // "100.5M"
 //	bytefmt.ByteSize(uint64(1024)) // "1K"
 //
 package bytefmt
@@ -25,13 +25,12 @@ var bytesPattern *regexp.Regexp = regexp.MustCompile(`(?i)^(-?\d+)([KMGT]B?|B)$`
 
 var invalidByteQuantityError = errors.New("Byte quantity must be a positive integer with a unit of measurement like M, MB, G, or GB")
 
-// ByteSize returns a human-readable byte string of the form 10M, 12.5K, and so forth.  The following units are available:
-//	T: Terabyte
-//	G: Gigabyte
-//	M: Megabyte
-//	K: Kilobyte
-//	B: Byte
-// The unit that results in the smallest number greater than or equal to 1 is always chosen.
+// ByteSize returns a human readable byte string, of the format 10M, 12.5K, etc.  The following units are available:
+//	T Terabyte
+//	G Gigabyte
+//	M Megabyte
+//	K Kilobyte
+// the unit that would result in printing the smallest whole number is always chosen
 func ByteSize(bytes uint64) string {
 	unit := ""
 	value := float32(bytes)
@@ -60,18 +59,8 @@ func ByteSize(bytes uint64) string {
 	return fmt.Sprintf("%s%s", stringValue, unit)
 }
 
-// ToMegabytes parses a string formatted by ByteSize as megabytes.
+// ToMegabyte parses a string formatted by ByteSize as megabytes
 func ToMegabytes(s string) (uint64, error) {
-	bytes, err := ToBytes(s)
-	if err != nil {
-		return 0, err
-	}
-
-	return bytes / MEGABYTE, nil
-}
-
-// ToBytes parses a string formatted by ByteSize as bytes.
-func ToBytes(s string) (uint64, error) {
 	parts := bytesPattern.FindStringSubmatch(strings.TrimSpace(s))
 	if len(parts) < 3 {
 		return 0, invalidByteQuantityError
@@ -97,5 +86,5 @@ func ToBytes(s string) (uint64, error) {
 		bytes = value * BYTE
 	}
 
-	return bytes, nil
+	return bytes / MEGABYTE, nil
 }
