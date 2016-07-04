@@ -1,6 +1,6 @@
 // bytefmt contains helper methods and constants for converting to and from a human readable byte format.
 //
-//	bytefmt.ByteSize(100.5*bytefmt.MEGABYE) // "100.5M"
+//	bytefmt.ByteSize(100.5*bytefmt.MEGABYTE) // "100.5M"
 //	bytefmt.ByteSize(uint64(1024)) // "1K"
 //
 package bytefmt
