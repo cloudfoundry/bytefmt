@@ -59,7 +59,7 @@ func ByteSize(bytes uint64) string {
 	return fmt.Sprintf("%s%s", stringValue, unit)
 }
 
-// ToMegabyte parses a string formatted by ByteSize as megabytes
+// ToMegabytes parses a string formatted by ByteSize as megabytes
 func ToMegabytes(s string) (uint64, error) {
 	parts := bytesPattern.FindStringSubmatch(strings.TrimSpace(s))
 	if len(parts) < 3 {
