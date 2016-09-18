@@ -12,4 +12,4 @@ Example:
   bytefmt.ByteSize(uint64(1024)) // returns "1K"
 ```
 
-For documentation, please see http://godoc.org/github.com/pivotal-golang/bytefmt
+For documentation, please see https://godoc.org/code.cloudfoundry.org/bytefmt
