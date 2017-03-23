@@ -151,6 +151,21 @@ var _ = Describe("bytefmt", func() {
 			Expect(err).NotTo(HaveOccurred())
 		})
 
+		It("parses byte amounts that are float (e.g. 5.3KB)", func() {
+			var (
+				bytes uint64
+				err   error
+			)
+
+			bytes, err = ToBytes("13.5KB")
+			Expect(bytes).To(Equal(uint64(13824)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("4.5KB")
+			Expect(bytes).To(Equal(uint64(4608)))
+			Expect(err).NotTo(HaveOccurred())
+		})
+
 		It("parses byte amounts with long units (e.g MB, GB)", func() {
 			var (
 				bytes uint64
