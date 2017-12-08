@@ -85,6 +85,29 @@ var _ = Describe("bytefmt", func() {
 			Expect(err).NotTo(HaveOccurred())
 		})
 
+		It("parses byte amounts with long binary units (e.g MiB, GiB)", func() {
+			var (
+				megabytes uint64
+				err       error
+			)
+
+			megabytes, err = ToMegabytes("5MiB")
+			Expect(megabytes).To(Equal(uint64(5)))
+			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("5mib")
+			Expect(megabytes).To(Equal(uint64(5)))
+			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("2GiB")
+			Expect(megabytes).To(Equal(uint64(2 * 1024)))
+			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("3TiB")
+			Expect(megabytes).To(Equal(uint64(3 * 1024 * 1024)))
+			Expect(err).NotTo(HaveOccurred())
+		})
+
 		It("returns an error when the unit is missing", func() {
 			_, err := ToMegabytes("5")
 			Expect(err).To(HaveOccurred())
@@ -185,6 +208,29 @@ var _ = Describe("bytefmt", func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			bytes, err = ToBytes("3TB")
+			Expect(bytes).To(Equal(uint64(3 * TERABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+		})
+
+		It("parses byte amounts with long binary units (e.g MiB, GiB)", func() {
+			var (
+				bytes uint64
+				err   error
+			)
+
+			bytes, err = ToBytes("5MiB")
+			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("5mib")
+			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("2GiB")
+			Expect(bytes).To(Equal(uint64(2 * GIGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("3TiB")
 			Expect(bytes).To(Equal(uint64(3 * TERABYTE)))
 			Expect(err).NotTo(HaveOccurred())
 		})
