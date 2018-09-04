@@ -218,6 +218,10 @@ var _ = Describe("bytefmt", func() {
 				err   error
 			)
 
+			bytes, err = ToBytes("5KiB")
+			Expect(bytes).To(Equal(uint64(5 * KILOBYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
 			bytes, err = ToBytes("5MiB")
 			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
 			Expect(err).NotTo(HaveOccurred())
