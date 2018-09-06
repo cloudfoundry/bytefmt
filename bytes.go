@@ -76,9 +76,7 @@ func ToBytes(s string) (uint64, error) {
 	s = strings.TrimSpace(s)
 	s = strings.ToUpper(s)
 
-	i := strings.IndexFunc(s, func(v rune) bool {
-		return unicode.IsLetter(v)
-	})
+	i := strings.IndexFunc(s, unicode.IsLetter)
 
 	if i != -1 {
 		bytesString, multiple := s[:i], s[i:]
