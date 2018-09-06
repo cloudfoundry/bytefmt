@@ -1,10 +1,31 @@
 package bytefmt_test
 
 import (
+	"testing"
+
 	. "code.cloudfoundry.org/bytefmt"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
+
+const (
+	byteSize = 1e10
+	toBytes = "\n\n\r\t10.18TiB\n\n\r\t"
+)
+
+func BenchmarkToBytes(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		ToBytes(toBytes)
+	}
+}
+
+func BenchmarkByteSize(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i < b.N; i++ {
+		ByteSize(byteSize)
+	}
+}
 
 var _ = Describe("bytefmt", func() {
 
@@ -217,6 +238,10 @@ var _ = Describe("bytefmt", func() {
 				bytes uint64
 				err   error
 			)
+
+			bytes, err = ToBytes("5KiB")
+			Expect(bytes).To(Equal(uint64(5 * KILOBYTE)))
+			Expect(err).NotTo(HaveOccurred())
 
 			bytes, err = ToBytes("5MiB")
 			Expect(bytes).To(Equal(uint64(5 * MEGABYTE)))
