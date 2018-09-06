@@ -75,26 +75,29 @@ func ToMegabytes(s string) (uint64, error) {
 func ToBytes(s string) (uint64, error) {
 	s = strings.TrimSpace(s)
 	s = strings.ToUpper(s)
-	for i, v := range s {
-		if unicode.IsLetter(v) {
-			bytesString, multiple := s[:i], s[i:]
-			bytes, err := strconv.ParseFloat(bytesString, 64)
-			if err != nil || bytes <= 0 {
-				return 0, invalidByteQuantityError
-			}
 
-			switch multiple {
-			case "T", "TB", "TIB":
-				return uint64(bytes * TERABYTE), nil
-			case "G", "GB", "GIB":
-				return uint64(bytes * GIGABYTE), nil
-			case "M", "MB", "MIB":
-				return uint64(bytes * MEGABYTE), nil
-			case "K", "KB", "KIB":
-				return uint64(bytes * KILOBYTE), nil
-			case "B":
-				return uint64(bytes), nil
-			}
+	i := strings.IndexFunc(s, func(v rune) bool {
+		return unicode.IsLetter(v)
+	})
+
+	if i != -1 {
+		bytesString, multiple := s[:i], s[i:]
+		bytes, err := strconv.ParseFloat(bytesString, 64)
+		if err != nil || bytes <= 0 {
+			return 0, invalidByteQuantityError
+		}
+
+		switch multiple {
+		case "T", "TB", "TIB":
+			return uint64(bytes * TERABYTE), nil
+		case "G", "GB", "GIB":
+			return uint64(bytes * GIGABYTE), nil
+		case "M", "MB", "MIB":
+			return uint64(bytes * MEGABYTE), nil
+		case "K", "KB", "KIB":
+			return uint64(bytes * KILOBYTE), nil
+		case "B":
+			return uint64(bytes), nil
 		}
 	}
 
