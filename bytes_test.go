@@ -6,10 +6,19 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+const maxUint64 = ^uint64(0)
+
 var _ = Describe("bytefmt", func() {
 
 	Context("ByteSize", func() {
 		It("Prints in the largest possible unit", func() {
+			Expect(ByteSize(maxUint64)).To(Equal("16E"))
+			Expect(ByteSize(10 * EXABYTE)).To(Equal("10E"))
+			Expect(ByteSize(uint64(10.5 * EXABYTE))).To(Equal("10.5E"))
+
+			Expect(ByteSize(10 * PETABYTE)).To(Equal("10P"))
+			Expect(ByteSize(uint64(10.5 * PETABYTE))).To(Equal("10.5P"))
+
 			Expect(ByteSize(10 * TERABYTE)).To(Equal("10T"))
 			Expect(ByteSize(uint64(10.5 * TERABYTE))).To(Equal("10.5T"))
 
@@ -60,6 +69,14 @@ var _ = Describe("bytefmt", func() {
 			megabytes, err = ToMegabytes("3T")
 			Expect(megabytes).To(Equal(uint64(3 * 1024 * 1024)))
 			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("4P")
+			Expect(megabytes).To(Equal(uint64(4 * 1024 * 1024 * 1024)))
+			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("5E")
+			Expect(megabytes).To(Equal(uint64(5 * 1024 * 1024 * 1024 * 1024)))
+			Expect(err).NotTo(HaveOccurred())
 		})
 
 		It("parses byte amounts with long units (e.g MB, GB)", func() {
@@ -83,6 +100,14 @@ var _ = Describe("bytefmt", func() {
 			megabytes, err = ToMegabytes("3TB")
 			Expect(megabytes).To(Equal(uint64(3 * 1024 * 1024)))
 			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("4PB")
+			Expect(megabytes).To(Equal(uint64(4 * 1024 * 1024 * 1024)))
+			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("5EB")
+			Expect(megabytes).To(Equal(uint64(5 * 1024 * 1024 * 1024 * 1024)))
+			Expect(err).NotTo(HaveOccurred())
 		})
 
 		It("parses byte amounts with long binary units (e.g MiB, GiB)", func() {
@@ -105,6 +130,14 @@ var _ = Describe("bytefmt", func() {
 
 			megabytes, err = ToMegabytes("3TiB")
 			Expect(megabytes).To(Equal(uint64(3 * 1024 * 1024)))
+			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("4PiB")
+			Expect(megabytes).To(Equal(uint64(4 * 1024 * 1024 * 1024)))
+			Expect(err).NotTo(HaveOccurred())
+
+			megabytes, err = ToMegabytes("5EiB")
+			Expect(megabytes).To(Equal(uint64(5 * 1024 * 1024 * 1024 * 1024)))
 			Expect(err).NotTo(HaveOccurred())
 		})
 
@@ -172,6 +205,14 @@ var _ = Describe("bytefmt", func() {
 			bytes, err = ToBytes("3T")
 			Expect(bytes).To(Equal(uint64(3 * TERABYTE)))
 			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("4P")
+			Expect(bytes).To(Equal(uint64(4 * PETABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("5E")
+			Expect(bytes).To(Equal(uint64(5 * EXABYTE)))
+			Expect(err).NotTo(HaveOccurred())
 		})
 
 		It("parses byte amounts that are float (e.g. 5.3KB)", func() {
@@ -210,6 +251,14 @@ var _ = Describe("bytefmt", func() {
 			bytes, err = ToBytes("3TB")
 			Expect(bytes).To(Equal(uint64(3 * TERABYTE)))
 			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("4PB")
+			Expect(bytes).To(Equal(uint64(4 * PETABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("5EB")
+			Expect(bytes).To(Equal(uint64(5 * EXABYTE)))
+			Expect(err).NotTo(HaveOccurred())
 		})
 
 		It("parses byte amounts with long binary units (e.g MiB, GiB)", func() {
@@ -236,6 +285,14 @@ var _ = Describe("bytefmt", func() {
 
 			bytes, err = ToBytes("3TiB")
 			Expect(bytes).To(Equal(uint64(3 * TERABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("4PiB")
+			Expect(bytes).To(Equal(uint64(4 * PETABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("5EiB")
+			Expect(bytes).To(Equal(uint64(5 * EXABYTE)))
 			Expect(err).NotTo(HaveOccurred())
 		})
 
