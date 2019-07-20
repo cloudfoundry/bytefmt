@@ -88,6 +88,10 @@ func ToBytes(s string) (uint64, error) {
 	s = strings.TrimSpace(s)
 	s = strings.ToUpper(s)
 
+	if s == "0" {
+		return 0, nil
+	}
+
 	i := strings.IndexFunc(s, unicode.IsLetter)
 
 	if i == -1 {
