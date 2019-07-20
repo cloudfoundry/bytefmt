@@ -328,5 +328,12 @@ var _ = Describe("bytefmt", func() {
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
 		})
+
+		It("does not error on zero value", func() {
+			zero := ByteSize(0)
+
+			_, err := ToBytes(zero)
+			Expect(err).NotTo(HaveOccurred())
+		})
 	})
 })
