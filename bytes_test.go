@@ -328,5 +328,24 @@ var _ = Describe("bytefmt", func() {
 			Expect(err).To(HaveOccurred())
 			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
 		})
+
+		It("parses byte amounts with spaces before units", func() {
+			var (
+				bytes uint64
+				err   error
+			)
+
+			bytes, err = ToBytes("10 M")
+			Expect(bytes).To(Equal(uint64(10 * MEGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("2 GB")
+			Expect(bytes).To(Equal(uint64(2 * GIGABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+
+			bytes, err = ToBytes("30 TiB")
+			Expect(bytes).To(Equal(uint64(30 * TERABYTE)))
+			Expect(err).NotTo(HaveOccurred())
+		})
 	})
 })
