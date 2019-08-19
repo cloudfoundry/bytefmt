@@ -34,8 +34,8 @@ var _ = Describe("bytefmt", func() {
 			Expect(ByteSize(1)).To(Equal("1B"))
 		})
 
-		It("prints '0' for zero bytes", func() {
-			Expect(ByteSize(0)).To(Equal("0"))
+		It("prints '0B' for zero bytes", func() {
+			Expect(ByteSize(0)).To(Equal("0B"))
 		})
 	})
 
@@ -168,10 +168,10 @@ var _ = Describe("bytefmt", func() {
 			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
 		})
 
-		It("returns an error for zero values", func() {
-			_, err := ToMegabytes("0TB")
-			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
+		It("parses a zero byte amount", func() {
+			megabytes, err := ToMegabytes("0TB")
+			Expect(err).NotTo(HaveOccurred())
+			Expect(megabytes).To(Equal(uint64(0)))
 		})
 	})
 
@@ -323,10 +323,10 @@ var _ = Describe("bytefmt", func() {
 			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
 		})
 
-		It("returns an error for zero values", func() {
-			_, err := ToBytes("0TB")
-			Expect(err).To(HaveOccurred())
-			Expect(err.Error()).To(ContainSubstring("unit of measurement"))
+		It("parses a zero byte amount", func() {
+			bytes, err := ToBytes("0TB")
+			Expect(err).NotTo(HaveOccurred())
+			Expect(bytes).To(Equal(uint64(0)))
 		})
 	})
 })

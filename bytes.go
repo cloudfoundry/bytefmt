@@ -59,7 +59,7 @@ func ByteSize(bytes uint64) string {
 	case bytes >= BYTE:
 		unit = "B"
 	case bytes == 0:
-		return "0"
+		return "0B"
 	}
 
 	result := strconv.FormatFloat(value, 'f', 1, 64)
@@ -96,7 +96,7 @@ func ToBytes(s string) (uint64, error) {
 
 	bytesString, multiple := s[:i], s[i:]
 	bytes, err := strconv.ParseFloat(bytesString, 64)
-	if err != nil || bytes <= 0 {
+	if err != nil || bytes < 0 {
 		return 0, invalidByteQuantityError
 	}
 
