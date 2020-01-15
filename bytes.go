@@ -95,6 +95,7 @@ func ToBytes(s string) (uint64, error) {
 	}
 
 	bytesString, multiple := s[:i], s[i:]
+	bytesString = strings.TrimSpace(bytesString)
 	bytes, err := strconv.ParseFloat(bytesString, 64)
 	if err != nil || bytes < 0 {
 		return 0, invalidByteQuantityError
