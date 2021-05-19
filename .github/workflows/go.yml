@@ -1,0 +1,37 @@
+name: Go
+
+on:
+  push:
+    branches: [ develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get Go version from go.mod
+      run: |
+        go_version=$(cat go.mod | grep "^go" | cut -d ' ' -f 2)
+        echo "go_version=${go_version}" >> $GITHUB_ENV
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ env.go_version }}
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Test
+      run: go test -v ./...
+
+  promote:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Promote to master branch
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
