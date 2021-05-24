@@ -30,8 +30,16 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: Promote to master branch
-      uses: ad-m/github-push-action@master
+    - uses: actions/checkout@v2
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: master
+        persist-credentials: false
+        fetch-depth: 0
+    - name: Promote to master
+      run: |
+        git fetch --all
+
+        git checkout master
+        git pull --rebase
+
+        git rebase develop
+        git push master
