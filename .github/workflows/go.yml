@@ -42,4 +42,4 @@ jobs:
         git pull --rebase
 
         git rebase develop
-        git push master
+        git push
