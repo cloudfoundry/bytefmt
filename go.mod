@@ -3,8 +3,8 @@ module code.cloudfoundry.org/bytefmt
 go 1.20
 
 require (
-	github.com/onsi/ginkgo/v2 v2.16.0
-	github.com/onsi/gomega v1.31.1
+	github.com/onsi/ginkgo/v2 v2.17.0
+	github.com/onsi/gomega v1.32.0
 )
 
 require (
