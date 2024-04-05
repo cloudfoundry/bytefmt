@@ -52,8 +52,8 @@ Running Tests
 
 
 - `./scripts/create-docker-container.bash`: This will create a docker container with appropriate mounts.
-- `./scripts/test-in-docker-locally.bash`: Create docker container and run all tests and setup in a single script.
-  - `./scripts/test-in-docker-locally.bash <package> <sub-package>`: For running tests under a specific package and/or sub-package
+- `./scripts/test-in-docker.bash`: Create docker container and run all tests and setup in a single script.
+  - `./scripts/test-in-docker.bash <package> <sub-package>`: For running tests under a specific package and/or sub-package
 
 > [!TIP]
 > If Running tests for this repo requires a DB flavor. The above scripts will default to mysql DB. Set DB environment variable for alternate DBs. Valid Options: mysql-8.0(or mysql),mysql-5.7,postgres
