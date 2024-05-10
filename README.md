@@ -11,10 +11,6 @@ Human-readable byte formatter.
 >
 > This repository should be imported as `code.cloudfoundry.org/bytefmt`.
 
-# Docs
-
--   [Usage](./docs/usage.md)
-
 # Contributing
 
 See the [Contributing.md](./.github/CONTRIBUTING.md) for more
